@@ -4557,7 +4557,8 @@
    * ------------------------------------------------------------------------
    */
 
-  class Modal extends BaseComponent {
+
+   class Modal extends BaseComponent {
     constructor(element, config) {
       super(element);
       this._config = this._getConfig(config);
@@ -4568,6 +4569,7 @@
       this._ignoreBackdropClick = false;
       this._isTransitioning = false;
       this._scrollBar = new ScrollBarHelper();
+    
     } // Getters
 
 
@@ -4580,49 +4582,6 @@
     } // Public
 
 
-    toggle(relatedTarget) {
-      return this._isShown ? this.hide() : this.show(relatedTarget);
-    }
-
-    show(relatedTarget) {
-      if (this._isShown || this._isTransitioning) {
-        return;
-      }
-
-      const showEvent = EventHandler.trigger(this._element, EVENT_SHOW$3, {
-        relatedTarget
-      });
-
-      if (showEvent.defaultPrevented) {
-        return;
-      }
-
-      this._isShown = true;
-
-      if (this._isAnimated()) {
-        this._isTransitioning = true;
-      }
-
-      this._scrollBar.hide();
-
-      document.body.classList.add(CLASS_NAME_OPEN);
-
-      this._adjustDialog();
-
-      this._setEscapeEvent();
-
-      this._setResizeEvent();
-
-      EventHandler.on(this._dialog, EVENT_MOUSEDOWN_DISMISS, () => {
-        EventHandler.one(this._element, EVENT_MOUSEUP_DISMISS, event => {
-          if (event.target === this._element) {
-            this._ignoreBackdropClick = true;
-          }
-        });
-      });
-
-      this._showBackdrop(() => this._showElement(relatedTarget));
-    }
 
     hide() {
       if (!this._isShown || this._isTransitioning) {
@@ -4999,93 +4958,7 @@
     } // Public
 
 
-    toggle(relatedTarget) {
-      return this._isShown ? this.hide() : this.show(relatedTarget);
-    }
-
-    show(relatedTarget) {
-      if (this._isShown) {
-        return;
-      }
-
-      const showEvent = EventHandler.trigger(this._element, EVENT_SHOW$2, {
-        relatedTarget
-      });
-
-      if (showEvent.defaultPrevented) {
-        return;
-      }
-
-      this._isShown = true;
-      this._element.style.visibility = 'visible';
-
-      this._backdrop.show();
-
-      if (!this._config.scroll) {
-        new ScrollBarHelper().hide();
-      }
-
-      this._element.removeAttribute('aria-hidden');
-
-      this._element.setAttribute('aria-modal', true);
-
-      this._element.setAttribute('role', 'dialog');
-
-      this._element.classList.add(CLASS_NAME_SHOW$3);
-
-      const completeCallBack = () => {
-        if (!this._config.scroll) {
-          this._focustrap.activate();
-        }
-
-        EventHandler.trigger(this._element, EVENT_SHOWN$2, {
-          relatedTarget
-        });
-      };
-
-      this._queueCallback(completeCallBack, this._element, true);
-    }
-
-    hide() {
-      if (!this._isShown) {
-        return;
-      }
-
-      const hideEvent = EventHandler.trigger(this._element, EVENT_HIDE$2);
-
-      if (hideEvent.defaultPrevented) {
-        return;
-      }
-
-      this._focustrap.deactivate();
-
-      this._element.blur();
-
-      this._isShown = false;
-
-      this._element.classList.remove(CLASS_NAME_SHOW$3);
-
-      this._backdrop.hide();
-
-      const completeCallback = () => {
-        this._element.setAttribute('aria-hidden', true);
-
-        this._element.removeAttribute('aria-modal');
-
-        this._element.removeAttribute('role');
-
-        this._element.style.visibility = 'hidden';
-
-        if (!this._config.scroll) {
-          new ScrollBarHelper().reset();
-        }
-
-        EventHandler.trigger(this._element, EVENT_HIDDEN$2);
-      };
-
-      this._queueCallback(completeCallback, this._element, true);
-    }
-
+    
     dispose() {
       this._backdrop.dispose();
 
@@ -6229,20 +6102,6 @@
 
 // Static
 
-
-    static jQueryInterface(config) {
-      return this.each(function () {
-        const data = Toast.getOrCreateInstance(this, config);
-
-        if (typeof config === 'string') {
-          if (typeof data[config] === 'undefined') {
-            throw new TypeError(`No method named "${config}"`);
-          }
-
-          data[config](this);
-        }
-      });
-    }
 
   }
 
