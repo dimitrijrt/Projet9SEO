@@ -8,6 +8,10 @@ body {
 	font-style: normal
 }
 
+.fluidlightboxImage  {
+	width: 100%;
+	height: 100%;
+}
 .top-header {
 	background-color: #fff;
 	position: sticky;
